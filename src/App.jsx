@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [data, setData] = useState({
@@ -9,6 +9,17 @@ function App() {
     hobbies: [],
   });
   const [submitData, setSubmitData] = useState([]);
+
+  useEffect(() => {
+    const storeData = localStorage.getItem("emp");
+    if (storeData) {
+      setSubmitData(JSON.parse(storeData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("emp", JSON.stringify(submitData));
+  }, [submitData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,7 +47,6 @@ function App() {
     <div className="container mx-auto text-center flex flex-col items-center p-5">
       <h1 className="text-3xl font-bold py-5">Employee Form</h1>
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="border p-4 rounded shadow-md">
         <table className="border border-black">
           <tbody>
@@ -97,7 +107,6 @@ function App() {
         </button>
       </form>
 
-      {/* Display Submitted Data */}
       {submitData.length > 0 && (
         <div className="mt-5">
           <h2 className="text-2xl font-medium">Submitted Data</h2>
@@ -106,6 +115,7 @@ function App() {
               <tr className="bg-gray-200">
                 <th className="border p-2">Name</th>
                 <th className="border p-2">Email</th>
+                <th className="border p-2">Password</th>
                 <th className="border p-2">Gender</th>
                 <th className="border p-2">Hobbies</th>
               </tr>
@@ -115,6 +125,7 @@ function App() {
                 <tr key={i}>
                   <td className="border p-2">{data.name}</td>
                   <td className="border p-2">{data.email}</td>
+                  <td className="border p-2">{data.password}</td>
                   <td className="border p-2">{data.gender}</td>
                   <td className="border p-2">{data.hobbies.join(", ")}</td>
                 </tr>
